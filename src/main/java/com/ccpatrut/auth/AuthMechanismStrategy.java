@@ -22,10 +22,10 @@ import java.util.Set;
 @ApplicationScoped
 @Slf4j
 @AllArgsConstructor
-public class AuthMechanism implements HttpAuthenticationMechanism {
+public class AuthMechanismStrategy implements HttpAuthenticationMechanism {
 
     private final OidcAuthenticationMechanism oidc;
-    private final RapidApiKeyAuthentication rapidApiKeyAuthentication;
+    private final RapidApiKeyAuthenticationMechanism rapidApiKeyAuthenticationMechanism;
 
     @Override
     public Uni<SecurityIdentity> authenticate(final RoutingContext context,
@@ -44,10 +44,7 @@ public class AuthMechanism implements HttpAuthenticationMechanism {
     }
 
     private HttpAuthenticationMechanism selectBetweenRapidApiAndOidc(final RoutingContext context) {
-        // for example, if no `Authorization` header is available and no `code`
-        // parameter is provided - use `jwt` to create a challenge
         final String header = context.request().getHeader("X-RapidAPI-Proxy-Secret");
-        return header != null ? rapidApiKeyAuthentication : oidc;
-
+        return header != null ? rapidApiKeyAuthenticationMechanism : oidc;
     }
 }

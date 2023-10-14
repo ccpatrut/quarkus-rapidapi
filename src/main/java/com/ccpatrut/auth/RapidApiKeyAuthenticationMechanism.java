@@ -23,7 +23,7 @@ import java.util.Set;
 @Alternative
 @ApplicationScoped
 @Priority(1)
-public class RapidApiKeyAuthentication implements HttpAuthenticationMechanism {
+public class RapidApiKeyAuthenticationMechanism implements HttpAuthenticationMechanism {
     private static final String X_RAPID_API_HEADER = "X-RapidAPI-Proxy-Secret";
     protected static final ChallengeData UNAUTHORIZED_CHALLENGE = new ChallengeData(
             HttpResponseStatus.UNAUTHORIZED.code(),
@@ -33,7 +33,7 @@ public class RapidApiKeyAuthentication implements HttpAuthenticationMechanism {
 
     private final String rapidApiKey;
 
-    public RapidApiKeyAuthentication(@ConfigProperty(name = "RAPID_API_KEY") final String rapidApiKey) {
+    public RapidApiKeyAuthenticationMechanism(@ConfigProperty(name = "RAPID_API_KEY") final String rapidApiKey) {
         this.rapidApiKey = rapidApiKey;
     }
 
@@ -46,7 +46,6 @@ public class RapidApiKeyAuthentication implements HttpAuthenticationMechanism {
                     .setPrincipal(new QuarkusPrincipal(rapidApiHeader)).build());
         }
         return Uni.createFrom().nullItem();
-
     }
 
     @Override
